@@ -1,0 +1,9 @@
+
+
+<------------------- Stub Resolver ------------------->
+
+So what a stub resolver basically does is it send requests to a dns server which stores the ip address. 
+previously i have build a dns proctol which can transalte the response from dns server to readable format.
+
+Here the stub resolver will fetch the answer and will handle it with the protocol.
+
