@@ -3,15 +3,16 @@ use std::io::{Error as E, ErrorKind, Read};
 use std::net::Ipv6Addr;
 use std::net::{Ipv4Addr, UdpSocket};
 
+#[derive(Clone)]
 pub struct BytePacketBuffer {
-    pub buf: [u8; 512],
+    pub buf: [u8; 4096],
     pub pos: usize,
 }
 
 impl BytePacketBuffer {
     pub fn new() -> BytePacketBuffer {
         BytePacketBuffer {
-            buf: [0; 512],
+            buf: [0; 4096],
             pos: 0,
         }
     }
@@ -46,8 +47,8 @@ impl BytePacketBuffer {
     }
 
     pub fn read(&mut self) -> Result<u8, E> {
-        if self.pos >= 512 {
-            return Err(E::new(ErrorKind::InvalidInput, "End of buffer"));
+        if self.pos >= 4096 {
+            return Err(E::new(ErrorKind::InvalidInput, "End of buffer - read"));
         }
         let res = self.buf[self.pos];
         self.pos += 1;
@@ -56,15 +57,15 @@ impl BytePacketBuffer {
     }
 
     pub fn get(&self, pos: usize) -> Result<u8, E> {
-        if pos >= 512 {
-            return Err(E::new(ErrorKind::InvalidInput, "End of buffer"));
+        if pos >= 4096 {
+            return Err(E::new(ErrorKind::InvalidInput, "End of buffer - get"));
         }
         Ok(self.buf[pos])
     }
 
     pub fn get_range(&self, start: usize, len: usize) -> Result<&[u8], E> {
-        if start + len >= 512 {
-            return Err(E::new(ErrorKind::InvalidInput, "End of buffer"));
+        if start + len >= 4096 {
+            return Err(E::new(ErrorKind::InvalidInput, "End of buffer - get_range"));
         }
         Ok(&self.buf[start..start + len as usize])
     }
@@ -134,7 +135,7 @@ impl BytePacketBuffer {
     }
 
     fn write(&mut self, val: u8) -> Result<(), E> {
-        if self.pos >= 512 {
+        if self.pos >= 4096 {
             return Err(E::new(ErrorKind::InvalidInput, "Limit of jumps exceeded"));
         }
         self.buf[self.pos] = val;
@@ -427,7 +428,6 @@ impl DnsRecord {
         let _ = buffer.read_u16();
         let ttl = buffer.read_u32()?;
         let data_len = buffer.read_u16()?;
-
         match qtype {
             QueryType::A => {
                 let raw_addr = buffer.read_u32()?;
@@ -660,7 +660,7 @@ impl DnsPacket {
         Ok(result)
     }
 
-    fn write(&mut self, buffer: &mut BytePacketBuffer) -> Result<(), E> {
+    pub fn write(&mut self, buffer: &mut BytePacketBuffer) -> Result<(), E> {
         self.header.questions = self.questions.len() as u16;
         self.header.answers = self.answers.len() as u16;
         self.header.authoritative_entries = self.authorities.len() as u16;
@@ -684,51 +684,6 @@ impl DnsPacket {
 
         Ok(())
     }
-}
-
-//<-------------------------- Final part ----------------------------------------------->fn main() -> Result<()> {
-fn Dns() -> Result<(), E> {
-    let qname = "www.site24x7.com";
-    let qtype = QueryType::A;
-
-    let server = ("8.8.8.8", 53);
-
-    let socket = UdpSocket::bind(("0.0.0.0", 43210))?;
-
-    let mut packet = DnsPacket::new();
-
-    packet.header.id = 6666;
-    packet.header.questions = 1;
-    packet.header.recursion_desired = true;
-    packet
-        .questions
-        .push(DnsQuestion::new(qname.to_string(), qtype));
-
-    let mut req_buffer = BytePacketBuffer::new();
-    packet.write(&mut req_buffer)?;
-
-    socket.send_to(&req_buffer.buf[0..req_buffer.pos], server)?;
-
-    let mut res_buffer = BytePacketBuffer::new();
-    socket.recv_from(&mut res_buffer.buf)?;
-
-    let res_packet = DnsPacket::from_buffer(&mut res_buffer)?;
-    println!("{:#?}", res_packet.header);
-
-    for q in res_packet.questions {
-        println!("{:#?}", q);
-    }
-    for rec in res_packet.answers {
-        println!("{:#?}", rec);
-    }
-    for rec in res_packet.authorities {
-        println!("{:#?}", rec);
-    }
-    for rec in res_packet.resources {
-        println!("{:#?}", rec);
-    }
-
-    Ok(())
 }
 
 fn lookup(qname: &str, qtype: QueryType) -> Result<DnsPacket, E> {

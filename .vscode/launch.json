@@ -1,0 +1,125 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "attach",
+            "name": "Attach",
+            "program": "${workspaceFolder}/<program>"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'DNSserver'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=DNSserver",
+                    "--package=DNSserver"
+                ],
+                "filter": {
+                    "name": "DNSserver",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'DNSserver'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=DNSserver",
+                    "--package=DNSserver"
+                ],
+                "filter": {
+                    "name": "DNSserver",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'DnsResolver'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=DnsResolver",
+                    "--package=DNSserver"
+                ],
+                "filter": {
+                    "name": "DnsResolver",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'DnsResolver'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=DnsResolver",
+                    "--package=DNSserver"
+                ],
+                "filter": {
+                    "name": "DnsResolver",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'Dnspacket'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=Dnspacket",
+                    "--package=DNSserver"
+                ],
+                "filter": {
+                    "name": "Dnspacket",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'Dnspacket'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=Dnspacket",
+                    "--package=DNSserver"
+                ],
+                "filter": {
+                    "name": "Dnspacket",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

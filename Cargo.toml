@@ -8,3 +8,7 @@ edition = "2021"
 [[bin]]
 name = "Dnspacket"
 path = "src/DnsFunctions/Dnspacket.rs"
+
+[[bin]]
+name = "DnsResolver"
+path = "src/DnsFunctions/DnsResolver.rs"
