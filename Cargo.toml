@@ -9,3 +9,7 @@ tokio = { version = "1.36", features =["full"]}
 [[bin]]
 name = "DnsResolver"
 path = "src/DnsFunctions/DnsResolver.rs"
+
+[[bin]]
+name = "asyncDnsResolver"
+path = "src/DnsFunctions/asyncDnsResolver.rs"

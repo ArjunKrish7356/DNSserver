@@ -1,13 +1,12 @@
-use std::fs::File;
-use std::io::{Error as E, ErrorKind, Read};
-use std::net::Ipv6Addr;
-use std::net::{Ipv4Addr, UdpSocket};
+use std::io::{Error as E, ErrorKind};
+use std::net::{Ipv4Addr, Ipv6Addr};
 
 #[derive(Clone, Copy)]
 pub struct BytePacketBuffer {
     pub buf: [u8; 4096],
     pub pos: usize,
 }
+
 
 impl BytePacketBuffer {
     pub fn new() -> BytePacketBuffer {
