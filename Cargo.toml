@@ -4,10 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-
-[[bin]]
-name = "Dnspacket"
-path = "src/DnsFunctions/Dnspacket.rs"
+tokio = { version = "1.36", features =["full"]}
 
 [[bin]]
 name = "DnsResolver"
