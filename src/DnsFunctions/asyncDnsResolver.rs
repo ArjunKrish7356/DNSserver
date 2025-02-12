@@ -87,7 +87,7 @@ async fn fetch_ns(
 
     out_socket
         .send_to(
-            &buffer.buf[0..buffer.pos], // Later adjust to send only relevant part
+            &buffer.buf[0..buffer.pos],
             root_server,
         )
         .await
